@@ -25,6 +25,7 @@ namespace camada_fis {
         Binaria() {};
         ~Binaria() {};
 
+    private:
         void transmitir() override;
         void decodificar() override;
     };
@@ -37,6 +38,7 @@ namespace camada_fis {
         Manchester() {};
         ~Manchester() {};
 
+    private:
         void transmitir() override;
         void decodificar() override;
     };
@@ -48,6 +50,7 @@ namespace camada_fis {
         Bipolar() {};
         ~Bipolar() {};
 
+    private:
         void transmitir() override;
         void decodificar() override;
     };
