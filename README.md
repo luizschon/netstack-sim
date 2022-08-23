@@ -24,6 +24,6 @@ prompt> make submit
 ```
 
 ## Integrantes
-- Luiz Carlos Schonarth Junior - 19/0055171
--
--
+- Hyago Gabriel Oliveira Figueiredo - matrícula 17/0105067
+- José Vinícius Garreto Costa - matrícula 18/0123734
+- Luiz Carlos Schonarth Junior - matrícula 19/0055171
