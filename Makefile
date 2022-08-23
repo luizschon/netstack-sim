@@ -6,7 +6,7 @@ OBJ_D=obj
 OBJS=$(patsubst %.cpp, $(OBJ_D)/%.o, $(SRCS))
 BIN_D=bin
 BIN=$(BIN_D)/simulador
-ZIPNAME=Trabalho2_Luiz_190055171.zip
+ZIPNAME=T2_TR1_Luiz_190055171.zip
 
 all: $(BIN)
 
@@ -31,5 +31,5 @@ clean:
 	rm -rf $(BIN_D) $(OBJ_D)
 
 submit: clean
-	rm $(ZIPNAME)
+	rm -f $(ZIPNAME)
 	zip $(ZIPNAME) *
