@@ -18,6 +18,11 @@ prompt> make release
 prompt> bin/simulador
 ```
 
+## Gerando o arquivo `zip` de submissão
+```
+prompt> make submit
+```
+
 ## Integrantes
 - Luiz Carlos Schonarth Junior - 19/0055171
 -
