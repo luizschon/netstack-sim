@@ -1,6 +1,5 @@
 CC=g++
 CPP_FLAGS=-std=c++14 -g -Wall
-CPP_FLAGS=-std=c++14 -O2
 SRCS=$(wildcard *.cpp)
 OBJ_D=obj
 OBJS=$(patsubst %.cpp, $(OBJ_D)/%.o, $(SRCS))
