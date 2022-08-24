@@ -29,10 +29,6 @@ void Codificacao::setQuadro(const std::string &mensagem) {
     this->quadro = mensagem_para_quadro(mensagem);
 } // fim do método setQuadro
 
-std::vector<bit> Codificacao::getQuadro() {
-    return quadro;
-} // fim do método setQuadro
-
 Binaria::Binaria(std::string mensagem) : Codificacao(mensagem) {
     codificar();
 } // fim do método construtor Binaria
@@ -45,12 +41,11 @@ void Binaria::codificar() {
 } // fim do método Binaria::transmitir
 
 std::string Binaria::decodificar() {
-    std::vector<bit> quadro = getQuadro();
-    return utils::get_string(quadro);
+    return utils::get_string(this->quadro);
 } // fim do método Binaria::decodificar
 
 Manchester::Manchester(std::string mensagem) : Codificacao(mensagem) {
-
+    codificar();
 } // fim do método construtor Manchester
 
 void Manchester::codificar() {

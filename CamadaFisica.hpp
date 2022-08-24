@@ -26,7 +26,6 @@ namespace camada_fis {
         // Setters e getter para o quadro
         void setQuadro(std::vector<bit> &quadro);
         void setQuadro(const std::string &mensagem);
-        std::vector<bit> getQuadro();
 
     protected:
         std::vector<bit> quadro; // Quadro composto de bits (valor 0 ou 1)
