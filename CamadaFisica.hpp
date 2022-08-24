@@ -20,8 +20,8 @@ namespace camada_fis {
         virtual ~Codificacao() = default;
 
         // Assinatura dos métodos virtuais puros
-        virtual void codificar()   = 0;
-        virtual void decodificar() = 0;
+        virtual void codificar()          = 0;
+        virtual std::string decodificar() = 0;
 
         // Setters e getter para o quadro
         void setQuadro(std::vector<bit> &quadro);
@@ -41,7 +41,7 @@ namespace camada_fis {
         ~Binaria() = default;
 
         void codificar() override;
-        void decodificar() override;
+        std::string decodificar() override;
     };
 
     /* Classe que deriva a classe abstrata 'Codificacao' e implementa
@@ -54,7 +54,7 @@ namespace camada_fis {
         ~Manchester() = default;
 
         void codificar() override;
-        void decodificar() override;
+        std::string decodificar() override;
     };
 
     /* Classe que deriva a classe abstrata 'Codificacao' e implementa
@@ -66,7 +66,7 @@ namespace camada_fis {
         ~Bipolar() = default;
 
         void codificar() override;
-        void decodificar() override;
+        std::string decodificar() override;
     };
 
 }

@@ -43,7 +43,7 @@ void Binaria::codificar() {
 
 } // fim do método Binaria::transmitir
 
-void Binaria::decodificar() {
+std::string Binaria::decodificar() {
 
 } // fim do método Binaria::decodificar
 
@@ -55,7 +55,7 @@ void Manchester::codificar() {
 
 } // fim do método Manchester::transmitir
 
-void Manchester::decodificar() {
+std::string Manchester::decodificar() {
 
 } // fim do método Manchester::decodificar
 
@@ -67,7 +67,7 @@ void Bipolar::codificar() {
 
 } // fim do método Bipolar::transmitir
 
-void Bipolar::decodificar() {
+std::string Bipolar::decodificar() {
 
 } // fim do método Bipolar::decodificar
 
