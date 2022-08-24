@@ -2,42 +2,34 @@
 #define __CAMADA_FISICA_HPP
 
 #include <string>
-
-/* Implementa tipo "bit" usando tipo primitivo bool
- * (booleano) representando 0 ou 1. */
-typedef bool bit;
-
-/* Enumerador para tornar a seleção do tipo de codificação
- * mais legível no código. */
-enum {
-    COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-};
+#include <vector>
+#include "Common.hpp"
 
 namespace camada_fis {
 
     /* Função de utilidade para transformar mensagem (string) em
      * um quadro composto de bits. */
-    int* mensagem_para_quadro(std::string mensagem);
+    std::vector<bit> mensagem_para_quadro(const std::string &mensagem);
 
     /* Classe abstrata para representar uma codificação genérica
      * da camada física da comunicação. */
     class Codificacao {
     public:
-        Codificacao(std::string mensagem);
+        Codificacao(const std::string &mensagem);
         Codificacao() = default; 
-        virtual ~Codificacao();
+        virtual ~Codificacao() = default;
 
         // Assinatura dos métodos virtuais puros
         virtual void codificar()   = 0;
         virtual void decodificar() = 0;
 
         // Setters e getter para o quadro
-        void setQuadro(bit quadro[]);
-        void setQuadro(std::string mensagem);
-        bit* getQuadro();
+        void setQuadro(std::vector<bit> &quadro);
+        void setQuadro(const std::string &mensagem);
+        std::vector<bit> getQuadro();
 
     protected:
-        bit *quadro = nullptr; // Quadro composto de bits (valor booleano 0 ou 1)
+        std::vector<bit> quadro; // Quadro composto de bits (valor 0 ou 1)
     };
 
     /* Classe que deriva a classe abstrata 'Codificacao' e implementa
