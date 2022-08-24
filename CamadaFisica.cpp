@@ -18,9 +18,7 @@ std::vector<bit> camada_fis::mensagem_para_quadro(const std::string &mensagem) {
 } // fim do método mensagem_para_quadro
 
 Codificacao::Codificacao(const std::string &mensagem) {
-    std::cout << "From codificacao: " << mensagem << "\n";
     this->quadro = mensagem_para_quadro(mensagem);
-    std::cout << "Quadro size: " << quadro.size() << "bits or " << quadro.size()/8 << " bytes\n";
 } // fim do método construtor Codificacao
 
 void Codificacao::setQuadro(std::vector<bit> &quadro) {
@@ -36,15 +34,19 @@ std::vector<bit> Codificacao::getQuadro() {
 } // fim do método setQuadro
 
 Binaria::Binaria(std::string mensagem) : Codificacao(mensagem) {
-
+    codificar();
 } // fim do método construtor Binaria
   
 void Binaria::codificar() {
-
+    /* A codificação NRZ (Non return zero) unipolar utiliza
+     * somente um nível de tensão (para bit 1) e, portanto,
+     * é igual ao quadro original criado. */
+    return;
 } // fim do método Binaria::transmitir
 
 std::string Binaria::decodificar() {
-
+    std::vector<bit> quadro = getQuadro();
+    return utils::get_string(quadro);
 } // fim do método Binaria::decodificar
 
 Manchester::Manchester(std::string mensagem) : Codificacao(mensagem) {
