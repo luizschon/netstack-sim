@@ -25,7 +25,7 @@ enum {
 namespace utils {
 
     // Operações com overload para capturar bytes no trem de bits.
-    byte get_byte(std::vector<bit>::iterator &it);
+    byte get_byte(std::vector<bit>::iterator it);
     byte get_byte(std::vector<bit> &trem_de_bits, unsigned int pos);
 
     // Operação para capturar e tratar uma sequência de bytes
