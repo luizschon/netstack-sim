@@ -1,0 +1,38 @@
+#ifndef __COMMON_HPP
+#define __COMMON_HPP
+
+#include <vector>
+#include <string>
+
+#define TAM_BYTE 8
+
+/* Implementa tipo "bit" usando tipo bool representando 0 ou 1. 
+ * Mesmo representando valores binários, o tipo booleano ocupa
+ * 8 bits (1 byte de memória) para guardar informação de 1 bit.
+ * O desperdício é custoso, porém 1 byte é a menor divisão de
+ * memória em C/C++. */
+typedef bool bit;
+
+/* Implementa tipo "byte" usando tipo primitivo unsigned char. */
+typedef unsigned char byte;
+
+/* Enumerador para tornar a seleção do tipo de codificação
+ * mais legível no código. */
+enum {
+    COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
+};
+
+namespace utils {
+
+    // Operações com overload para capturar bytes no trem de bits.
+    byte get_byte(std::vector<bit>::iterator &it);
+    byte get_byte(std::vector<bit> &trem_de_bits, unsigned int pos);
+
+    // Operação para capturar e tratar uma sequência de bytes
+    std::vector<byte> get_bytes(std::vector<bit> &trem_de_bits);
+    std::string bytes_para_string(std::vector<byte> &bytes);
+    std::string get_string(std::vector<bit> &trem_de_bits);
+
+};
+
+#endif // __COMMON_HPP
