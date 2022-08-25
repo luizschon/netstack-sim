@@ -1,6 +1,6 @@
 #include <iostream>
-#include "CamadaFisica.hpp"
-#include "Common.hpp"
+#include "../include/CamadaFisica.hpp"
+#include "../include/Common.hpp"
 
 using namespace camada_fis;
 
@@ -49,7 +49,6 @@ Manchester::Manchester(std::string mensagem) : Codificacao(mensagem) {
 } // fim do método construtor Manchester
 
 void Manchester::codificar() {
-
 } // fim do método Manchester::transmitir
 
 std::string Manchester::decodificar() {
@@ -68,6 +67,3 @@ std::string Bipolar::decodificar() {
 
 } // fim do método Bipolar::decodificar
 
-void meio_comunicacao::transmitir(bit trem_de_bits[]) {
-
-} // fim do método meio_comunicacao::transmitir

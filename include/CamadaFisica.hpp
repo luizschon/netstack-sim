@@ -68,12 +68,18 @@ namespace camada_fis {
         std::string decodificar() override;
     };
 
-}
+    class MeioComunicacao {
+    public: 
+        std::vector<volt> transmitir();
 
-namespace meio_comunicacao {
-    /* Função que transmite trem de bits da camada física transmissora 
-     * para a camada física receptora. */
-    void transmitir(bit trem_de_bits[]);
+        // Setters 
+        void setSinal(std::vector<volt> &sinal);
+        void setSinal(Codificacao &codigo);
+
+    protected:
+        std::vector<volt> sinal; // Sinal transmitido entre transmissor e receptor
+    };
+
 }
 
 #endif // __CAMADA_FISICA_HPP

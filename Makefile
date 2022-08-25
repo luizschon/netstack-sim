@@ -1,8 +1,9 @@
 CC=g++
 CPP_FLAGS=-std=c++14 -g -Wall
-SRCS=$(wildcard *.cpp)
+SRC_D=src
+SRCS=$(wildcard $(SRC_D)/*.cpp)
 OBJ_D=obj
-OBJS=$(patsubst %.cpp, $(OBJ_D)/%.o, $(SRCS))
+OBJS=$(patsubst $(SRC_D)/%.cpp, $(OBJ_D)/%.o, $(SRCS))
 BIN_D=bin
 BIN=$(BIN_D)/simulador
 ZIPNAME=T2_TR1_Luiz_190055171.zip
@@ -15,7 +16,7 @@ release: clean $(BIN)
 $(BIN): mkbin $(OBJS)
 	$(CC) $(CPP_FLAGS) $(OBJS) -o $@
 
-$(OBJ_D)/%.o: %.cpp | mkobj
+$(OBJ_D)/%.o: $(SRC_D)/%.cpp | mkobj
 	$(CC) $(CPP_FLAGS) -c $< -o $@
 
 .PHONY: mkbin mkobj clean submit

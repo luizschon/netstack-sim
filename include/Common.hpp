@@ -1,6 +1,7 @@
 #ifndef __COMMON_HPP
 #define __COMMON_HPP
 
+#include <cstdint>
 #include <vector>
 #include <string>
 
@@ -15,6 +16,12 @@ typedef bool bit;
 
 /* Implementa tipo "byte" usando tipo primitivo unsigned char. */
 typedef unsigned char byte;
+
+/* Tipo usado para representar energia do sinal gerado durante
+ * a codificação. Como nessa simulação não há modulação, o sinal
+ * será enviado da mesma forma que ele é codificado na camada 
+ * física, com amplitudes de +/-5 Volts. */
+typedef int8_t volt;
 
 /* Enumerador para tornar a seleção do tipo de codificação
  * mais legível no código. */

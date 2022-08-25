@@ -1,6 +1,6 @@
 #include <iostream>
 #include <unistd.h>
-#include "Common.hpp"
+#include "../include/Common.hpp"
 
 /* Recebe iterador do vetor de bits e percorre TAM_BYTE
  * vezes e armazena os 8 bits que compõem o byte no byte
