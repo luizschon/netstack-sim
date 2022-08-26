@@ -3,29 +3,25 @@
 #include "../include/CamadaFisica.hpp"
 #include "../include/Common.hpp"
 
+using namespace camada_fis;
+
 int main(int argc, char **argv) {
-    camada_fis::Codificacao *cod; // Instância de Codificacao
+    tipos_codificacao tipo = COD_BINARIA;
 
-    int tipo = COD_BINARIA; 
-    std::string msg = "Hello from the other side\n";
+    Transmissor *trans = new Transmissor(tipo);
+    Receptor *recep = new Receptor(tipo);
+    MeioComunicacao *meio = new MeioComunicacao(*trans, *recep);
 
-    switch (tipo) {
-        case COD_BINARIA:    // Código Binário
-            cod = new camada_fis::Binaria(msg);
-            break;
-        case COD_MANCHESTER: // Código Manchester
-            cod = new camada_fis::Manchester();
-            break;
-        case COD_BIPOLAR:    // Código Polar
-            cod = new camada_fis::Bipolar();
-            break;
-        default:
-            break;
-    }
+    trans->geraSinal("Hello from the other side\n");
 
-    std::cout << cod->decodificar();
+    meio->transmitir();
 
-    delete cod;
+    std::string res = recep->interpretaSinal();
+    std::cout << res;
+
+    delete trans;
+    delete recep;
+    delete meio;
 
     return 0;
 } // fim da função main
