@@ -25,11 +25,14 @@ typedef int8_t volt;
 
 /* Enumerador para tornar a seleção do tipo de codificação
  * mais legível no código. */
-enum {
+typedef enum {
     COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-};
+} tipos_codificacao;
 
 namespace utils {
+
+    // Operação que transforma string em um trem de bits.
+    std::vector<bit> string_para_bits(const std::string &str);
 
     // Operações com overload para capturar bytes no trem de bits.
     byte get_byte(std::vector<bit>::iterator it);
@@ -38,7 +41,7 @@ namespace utils {
     // Operação para capturar e tratar uma sequência de bytes
     std::vector<byte> get_bytes(std::vector<bit> &trem_de_bits);
     std::string bytes_para_string(std::vector<byte> &bytes);
-    std::string get_string(std::vector<bit> &trem_de_bits);
+    std::string bits_para_string(std::vector<bit> &trem_de_bits);
 
 };
 

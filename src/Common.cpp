@@ -2,6 +2,22 @@
 #include <unistd.h>
 #include "../include/Common.hpp"
 
+/* Recebe string e, para cada caracter (byte), insere bits
+ * correspondentes no vetor de bits de retorno na ordem
+ * big-endian -> little-endian. */
+std::vector<bit> utils::string_para_bits(const std::string &str) {
+    std::vector<bit> bits;
+
+    for (auto &c : str) {
+        for(int i = 0; i < TAM_BYTE; i++) {
+            /* Para cada caractere da string, insere os bits do byte do caracter
+             * na ordem big-endian -> little-endian. */
+            bits.push_back(((c << i) & 0x80));
+        }
+    }
+    return bits;
+} // fim da função string_para_bits
+
 /* Recebe iterador do vetor de bits e percorre TAM_BYTE
  * vezes e armazena os 8 bits que compõem o byte no byte
  * de retorno na ordem big-endian -> little-endian. */
@@ -49,7 +65,7 @@ std::string utils::bytes_para_string(std::vector<byte> &bytes) {
 } // fim da função bytes_para_string
 
 /* Recebe vetor de bits e retorna string codificada pelos bits. */
-std::string utils::get_string(std::vector<bit> &trem_de_bits) {
+std::string utils::bits_para_string(std::vector<bit> &trem_de_bits) {
     std::vector<byte> bytes = utils::get_bytes(trem_de_bits);
     return utils::bytes_para_string(bytes);
 } // fim da função get_string
