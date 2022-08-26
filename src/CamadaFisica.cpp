@@ -43,12 +43,38 @@ std::vector<bit> Manchester::decodificar(std::vector<volt> &sinal) {
 
 std::vector<volt> Bipolar::codificar(std::vector<bit> &quadro) {
     std::vector<volt> sinal;
+    // Contador utilizado para alternar entre voltagem positiva e negativa
+    int contador = 0;
+    int val = PULSO_NULO; // Valor que será inserido no sinal a cada iteração
 
+    /* Na codificação Bipolar (AMI), o pulso de voltagem é
+     * alternada entre +5V e -5V a cada bit 1. Os bits 0 
+     * são codificados como um pulso nulo. */
+    for (auto b : quadro) {
+        val = PULSO_NULO;
+        if (b == 1) {
+            if (contador % 2 == 0) 
+                val = PULSO_POS;
+            else
+                val = PULSO_NEG;
+        }
+        sinal.push_back(val);
+    }
     return sinal;
 } // fim do método Bipolar::codificar
 
 std::vector<bit> Bipolar::decodificar(std::vector<volt> &sinal) {
     std::vector<bit> quadro;
+
+    /* Para decodificar um sinal Bipolar (AMI) basta reparar
+     * que um pulso nulo representa o bit 0 e qualquer outro
+     * pulso representa um bit 1. */
+    for (auto s : sinal) {
+        if (s == PULSO_NULO)
+            quadro.push_back(0);
+        else
+            quadro.push_back(1);
+    }
 
     return quadro;
 } // fim do método Bipolar::decodificar

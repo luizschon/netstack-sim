@@ -10,18 +10,20 @@ int main(int argc, char **argv) {
 
     Transmissor *trans = new Transmissor(tipo);
     Receptor *recep = new Receptor(tipo);
-    MeioComunicacao *meio = new MeioComunicacao(*trans, *recep);
+    std::string res;
 
-    trans->geraSinal("Hello from the other side\n");
+    trans->geraSinal("Hello from the other side [BINARIO]\n");
+    trans->transmitir(*recep);
+    res = recep->interpretaSinal();
+    std::cout << res;
 
-    meio->transmitir();
-
-    std::string res = recep->interpretaSinal();
+    trans->geraSinal("Hello from the other side [BIPOLAR]\n");
+    trans->transmitir(*recep);
+    res = recep->interpretaSinal();
     std::cout << res;
 
     delete trans;
     delete recep;
-    delete meio;
 
     return 0;
 } // fim da função main
