@@ -82,19 +82,6 @@ namespace camada_fis {
     };
 
     /* Classe derivada de Modulo que implementa funcionalidades
-     * específicas do transmissor da camada física. */
-    class Transmissor : public Modulo {
-    public:
-        Transmissor(tipos_codificacao tipo);
-        Transmissor(Codificacao &codigo);
-        Transmissor() = default;
-        ~Transmissor() = default;
-
-        void geraSinal();
-        void geraSinal(const std::string &mensagem);
-    };
-
-    /* Classe derivada de Modulo que implementa funcionalidades
      * específicas do receptor da camada física. */
     class Receptor : public Modulo {
     public:
@@ -106,26 +93,18 @@ namespace camada_fis {
         std::string interpretaSinal();
     };
 
-    /* Classe que implementa meio de comunicação para transmitir sinal
-     * codificado entre Transmissor e Receptor da camada física.
-     * Armazena ponteiros para Transmissor e Receptor.*/
-    class MeioComunicacao {
-    public: 
-        MeioComunicacao(Transmissor &transmissor, Receptor &receptor);
-        MeioComunicacao() = default;
-        ~MeioComunicacao() = default;
+    /* Classe derivada de Modulo que implementa funcionalidades
+     * específicas do transmissor da camada física. */
+    class Transmissor : public Modulo {
+    public:
+        Transmissor(tipos_codificacao tipo);
+        Transmissor(Codificacao &codigo);
+        Transmissor() = default;
+        ~Transmissor() = default;
 
-        /* Função que simula trasmissão do sinal entre transmissor e
-         * receptor. */
-        void transmitir();
-
-        // Setters de transmissor e receptor
-        void setTransmissor(Transmissor &transmissor);
-        void setReceptor(Receptor &receptor);
-
-    protected:
-        Transmissor *transmissor = nullptr;
-        Receptor *receptor = nullptr;
+        void geraSinal();
+        void geraSinal(const std::string &mensagem);
+        void transmitir(Receptor &receptor);
     };
 
 }

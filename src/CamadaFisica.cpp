@@ -30,7 +30,6 @@ std::vector<bit> Binaria::decodificar(std::vector<volt> &sinal) {
 } // fim do método Binaria::decodificar
 
 std::vector<volt> Manchester::codificar(std::vector<bit> &quadro) {
-
     std::vector<volt> sinal;
 
     return sinal;
@@ -73,6 +72,10 @@ Modulo::Modulo(Codificacao &codigo) {
 } // fim do método construtor Modulo::Modulo
 
 void Modulo::setCodigo(tipos_codificacao tipo) {
+    // Deleta codificação alocada caso exista
+    if (this->codigo != nullptr)
+        delete this->codigo;
+
     switch (tipo) {
         case COD_BINARIA:
             codigo = new Binaria();
@@ -113,6 +116,20 @@ void Transmissor::geraSinal(const std::string &mensagem) {
     this->sinal = this->codigo->codificar(this->quadro);
 } // fim do método Transmissor::getSinal
 
+void Transmissor::transmitir(Receptor &receptor) {
+    std::vector<volt> sinalTransmitido = this->getSinal();
+    std::vector<volt> sinalRecebido = receptor.getSinal();
+
+    sinalRecebido.clear();
+    auto it = sinalTransmitido.begin();
+
+    while(sinalTransmitido.size() != sinalRecebido.size()) {
+        sinalRecebido.push_back(*it);
+        it++;
+    }
+    receptor.setSinal(sinalRecebido);
+} // fim do método transmitir
+
 Receptor::Receptor(tipos_codificacao tipo) 
 : Modulo(tipo) {} // fim do método construtor Receptor::Receptor
 
@@ -123,31 +140,4 @@ std::string Receptor::interpretaSinal() {
     this->quadro = this->codigo->decodificar(this->sinal);
     return utils::bits_para_string(this->quadro);
 } // fim do método Receptor::interpretaSinal
-
-MeioComunicacao::MeioComunicacao(Transmissor &transmissor, Receptor &receptor) {
-    this->transmissor = &transmissor;
-    this->receptor = &receptor;
-} // fim do método construtor MeioComunicacao::MeioComunicacao
-
-void MeioComunicacao::setTransmissor(Transmissor &transmissor) {
-    this->transmissor = &transmissor;
-} // fim do método MeioComunicacao::setTransmissor
-
-void MeioComunicacao::setReceptor(Receptor &receptor) {
-    this->receptor = &receptor;
-} // fim do método MeioComunicacao::setReceptor
-
-void MeioComunicacao::transmitir() {
-    std::vector<volt> sinalTransmitido = transmissor->getSinal();
-    std::vector<volt> sinalRecebido = receptor->getSinal();
-    auto it = sinalTransmitido.begin();
-
-
-    while(sinalTransmitido.size() != sinalRecebido.size()) {
-        sinalRecebido.push_back(*it);
-        it++;
-    }
-
-    receptor->setSinal(sinalRecebido);
-} // fim do método MeioComunicacao::transmitir
 
