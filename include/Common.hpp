@@ -1,10 +1,10 @@
 #ifndef __COMMON_HPP
 #define __COMMON_HPP
 
-#include <cstdint>
 #include <vector>
 #include <string>
 
+/* Quantidade de bits em um byte. */
 #define TAM_BYTE 8
 
 /* Implementa tipo "bit" usando tipo bool representando 0 ou 1. 
@@ -21,7 +21,13 @@ typedef unsigned char byte;
  * a codificação. Como nessa simulação não há modulação, o sinal
  * será enviado da mesma forma que ele é codificado na camada 
  * física, com amplitudes de +/-5 Volts. */
-typedef int8_t volt;
+typedef int volt;
+
+/* Expressões constante para representar os pulsos elétricos 
+ * codificados no sinal em volts. */
+#define PULSO_POS 5
+#define PULSO_NULO 0
+#define PULSO_NEG -5
 
 /* Enumerador para tornar a seleção do tipo de codificação
  * mais legível no código. */
@@ -42,6 +48,8 @@ namespace utils {
     std::vector<byte> get_bytes(std::vector<bit> &trem_de_bits);
     std::string bytes_para_string(std::vector<byte> &bytes);
     std::string bits_para_string(std::vector<bit> &trem_de_bits);
+
+    void print_bits(std::vector<bit> &trem_de_bits);
 
 };
 

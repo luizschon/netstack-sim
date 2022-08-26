@@ -69,3 +69,14 @@ std::string utils::bits_para_string(std::vector<bit> &trem_de_bits) {
     std::vector<byte> bytes = utils::get_bytes(trem_de_bits);
     return utils::bytes_para_string(bytes);
 } // fim da função get_string
+
+void utils::print_bits(std::vector<bit> &trem_de_bits) {
+    for (int i = 0; i < trem_de_bits.size(); i += TAM_BYTE) {
+        for (int j = 0; j < TAM_BYTE; j++) {
+            std::cout << trem_de_bits[i+j];
+        }
+        std::cout << " ";
+    }
+    std::cout << "\n";
+} // fim da função print_bits
+
