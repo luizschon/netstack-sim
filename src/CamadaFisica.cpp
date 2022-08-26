@@ -31,18 +31,27 @@ std::vector<bit> Binaria::decodificar(std::vector<volt> &sinal) {
 
 std::vector<volt> Manchester::codificar(std::vector<bit> &quadro) {
 
+    std::vector<volt> sinal;
+
+    return sinal;
 } // fim do método Manchester::codificar
 
 std::vector<bit> Manchester::decodificar(std::vector<volt> &sinal) {
+    std::vector<bit> quadro;
 
+    return quadro;
 } // fim do método Manchester::decodificar
 
 std::vector<volt> Bipolar::codificar(std::vector<bit> &quadro) {
+    std::vector<volt> sinal;
 
+    return sinal;
 } // fim do método Bipolar::codificar
 
 std::vector<bit> Bipolar::decodificar(std::vector<volt> &sinal) {
+    std::vector<bit> quadro;
 
+    return quadro;
 } // fim do método Bipolar::decodificar
   //
 Modulo::Modulo(tipos_codificacao tipo) {

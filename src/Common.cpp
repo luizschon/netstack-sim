@@ -71,7 +71,7 @@ std::string utils::bits_para_string(std::vector<bit> &trem_de_bits) {
 } // fim da função get_string
 
 void utils::print_bits(std::vector<bit> &trem_de_bits) {
-    for (int i = 0; i < trem_de_bits.size(); i += TAM_BYTE) {
+    for (int i = 0; i < (int) trem_de_bits.size(); i += TAM_BYTE) {
         for (int j = 0; j < TAM_BYTE; j++) {
             std::cout << trem_de_bits[i+j];
         }
