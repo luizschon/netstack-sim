@@ -1,4 +1,3 @@
-#include <iostream>
 #include "../include/CamadaFisica.hpp"
 #include "../include/Common.hpp"
 
@@ -26,7 +25,6 @@ std::vector<bit> Binaria::decodificar(std::vector<volt> &sinal) {
     for (auto s : sinal) {
         quadro.push_back(s/PULSO_POS);
     }
-    std::cout << "usando binaria\n";
     return quadro;
 } // fim do método Binaria::decodificar
 
@@ -54,7 +52,6 @@ std::vector<bit> Manchester::decodificar(std::vector<volt> &sinal) {
         else 
             quadro.push_back(0);
     }
-    std::cout << "usando manchester\n";
     return quadro;
 } // fim do método Manchester::decodificar
 
@@ -92,10 +89,9 @@ std::vector<bit> Bipolar::decodificar(std::vector<volt> &sinal) {
         else
             quadro.push_back(1);
     }
-    std::cout << "usando bipolar\n";
     return quadro;
 } // fim do método Bipolar::decodificar
-  //
+
 Modulo::Modulo(tipos_codificacao tipo) {
     switch (tipo) {
         case COD_BINARIA:
@@ -138,7 +134,7 @@ void Modulo::setCodigo(Codificacao &codigo) {
 
 void Modulo::setSinal(std::vector<volt> &sinal) {
     this->sinal = sinal;
-}
+} // fim de método Modulo::setSinal
 
 std::vector<volt> Modulo::getSinal() {
     return this->sinal;
@@ -149,7 +145,7 @@ Transmissor::Transmissor(tipos_codificacao tipo)
 
 Transmissor::Transmissor(Codificacao &codigo)
 : Modulo(codigo) {} // fim do método construtor Transmissor::Transmissor
-                    //
+
 void Transmissor::geraSinal() {
     this->sinal = this->codigo->codificar(this->quadro);
 } // fim do método Transmissor::getSinal
