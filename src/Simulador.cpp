@@ -17,6 +17,15 @@ int main(int argc, char **argv) {
     res = recep->interpretaSinal();
     std::cout << res;
 
+    trans->setCodigo(COD_MANCHESTER);
+    recep->setCodigo(COD_MANCHESTER);
+    trans->geraSinal("Hello from the other side [MANCHESTER]\n");
+    trans->transmitir(*recep);
+    res = recep->interpretaSinal();
+    std::cout << res;
+
+    trans->setCodigo(COD_BIPOLAR);
+    recep->setCodigo(COD_BIPOLAR);
     trans->geraSinal("Hello from the other side [BIPOLAR]\n");
     trans->transmitir(*recep);
     res = recep->interpretaSinal();

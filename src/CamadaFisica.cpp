@@ -26,18 +26,35 @@ std::vector<bit> Binaria::decodificar(std::vector<volt> &sinal) {
     for (auto s : sinal) {
         quadro.push_back(s/PULSO_POS);
     }
+    std::cout << "usando binaria\n";
     return quadro;
 } // fim do método Binaria::decodificar
 
 std::vector<volt> Manchester::codificar(std::vector<bit> &quadro) {
     std::vector<volt> sinal;
 
+    /* Na codificação Manchester, os bits 1 são codificados
+     * para os bits 10 e os bits 0 são codificados para os
+     * bits 01. */
+    for (auto b : quadro) {
+        if (b == 1)
+            sinal.insert(sinal.end(), {PULSO_POS, PULSO_NULO});
+        else
+            sinal.insert(sinal.end(), {PULSO_NULO, PULSO_POS});
+    }
     return sinal;
 } // fim do método Manchester::codificar
 
 std::vector<bit> Manchester::decodificar(std::vector<volt> &sinal) {
     std::vector<bit> quadro;
 
+    for (auto it = sinal.begin(); it != sinal.end(); it += 2) {
+        if (*it == PULSO_POS && *(it+1) == PULSO_NULO)
+            quadro.push_back(1);
+        else 
+            quadro.push_back(0);
+    }
+    std::cout << "usando manchester\n";
     return quadro;
 } // fim do método Manchester::decodificar
 
@@ -75,7 +92,7 @@ std::vector<bit> Bipolar::decodificar(std::vector<volt> &sinal) {
         else
             quadro.push_back(1);
     }
-
+    std::cout << "usando bipolar\n";
     return quadro;
 } // fim do método Bipolar::decodificar
   //
