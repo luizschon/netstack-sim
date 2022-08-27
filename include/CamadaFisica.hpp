@@ -82,10 +82,23 @@ namespace camada_fis {
     };
 
     /* Classe derivada de Modulo que implementa funcionalidades
+     * específicas do transmissor da camada física. */
+    class Transmissor : public Modulo {
+    public:
+        Transmissor(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
+        Transmissor(Codificacao &codigo);
+        Transmissor() = default;
+        ~Transmissor() = default;
+
+        void geraSinal();
+        void geraSinal(const std::string &mensagem);
+    };
+
+    /* Classe derivada de Modulo que implementa funcionalidades
      * específicas do receptor da camada física. */
     class Receptor : public Modulo {
     public:
-        Receptor(tipos_codificacao tipo);
+        Receptor(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
         Receptor(Codificacao &codigo);
         Receptor() = default;
         ~Receptor() = default;
@@ -93,18 +106,22 @@ namespace camada_fis {
         std::string interpretaSinal();
     };
 
-    /* Classe derivada de Modulo que implementa funcionalidades
-     * específicas do transmissor da camada física. */
-    class Transmissor : public Modulo {
+    /* Classe que implementa interface para transmissão de sinal
+     * de um transmissor para um receptor baseado no tipo de
+     * codificação especificado. */
+    class MeioComunicacao {
     public:
-        Transmissor(tipos_codificacao tipo);
-        Transmissor(Codificacao &codigo);
-        Transmissor() = default;
-        ~Transmissor() = default;
+        MeioComunicacao(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
+        MeioComunicacao(Transmissor *trans, Receptor *recep);        
+        MeioComunicacao() = default;        
+        ~MeioComunicacao() = default;        
 
-        void geraSinal();
-        void geraSinal(const std::string &mensagem);
-        void transmitir(Receptor &receptor);
+        void transmitir();
+        void setCodigo(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
+
+    private:
+        Transmissor *transmissor = nullptr;
+        Receptor *receptor = nullptr;
     };
 
 }

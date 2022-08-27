@@ -159,20 +159,6 @@ void Transmissor::geraSinal(const std::string &mensagem) {
     this->sinal = this->codigo->codificar(this->quadro);
 } // fim do método Transmissor::getSinal
 
-void Transmissor::transmitir(Receptor &receptor) {
-    std::vector<volt> sinalTransmitido = this->getSinal();
-    std::vector<volt> sinalRecebido = receptor.getSinal();
-
-    sinalRecebido.clear();
-    auto it = sinalTransmitido.begin();
-
-    while(sinalTransmitido.size() != sinalRecebido.size()) {
-        sinalRecebido.push_back(*it);
-        it++;
-    }
-    receptor.setSinal(sinalRecebido);
-} // fim do método transmitir
-
 Receptor::Receptor(tipos_codificacao tipo) 
 : Modulo(tipo) {} // fim do método construtor Receptor::Receptor
 
@@ -183,4 +169,33 @@ std::string Receptor::interpretaSinal() {
     this->quadro = this->codigo->decodificar(this->sinal);
     return utils::bits_para_string(this->quadro);
 } // fim do método Receptor::interpretaSinal
+
+MeioComunicacao::MeioComunicacao(tipos_codificacao tipo) {
+    this->transmissor = new Transmissor(tipo);
+    this->receptor = new Receptor(tipo);
+} // fim do método construtor MeioComunicacao::MeioComunicacao
+
+MeioComunicacao::MeioComunicacao(Transmissor *trans, Receptor *recep) {
+    this->transmissor = trans;
+    this->receptor = recep;
+} // fim do método construtor MeioComunicacao::MeioComunicacao
+
+void MeioComunicacao::transmitir() {
+    std::vector<volt> sinalTransmitido = this->transmissor->getSinal();
+    std::vector<volt> sinalRecebido = this->receptor->getSinal();
+
+    sinalRecebido.clear();
+    auto it = sinalTransmitido.begin();
+
+    while(sinalTransmitido.size() != sinalRecebido.size()) {
+        sinalRecebido.push_back(*it);
+        it++;
+    }
+    receptor->setSinal(sinalRecebido);
+} // fim do método MeioComunicacao::transmitir
+
+void MeioComunicacao::setCodigo(tipos_codificacao tipo) {
+    this->transmissor->setCodigo(tipo);
+    this->receptor->setCodigo(tipo);
+} // fim do método MeioComunicacao::setCodigo
 
