@@ -3,6 +3,12 @@
 ## Dependências
 - g++
 - GNU make
+- SDL2
+
+### Instalando dependências no Ubuntu
+```
+apt-get install libsdl2-dev g++ make
+```
 
 ## Como compilar e rodar o simulador
 
