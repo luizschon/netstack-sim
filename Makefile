@@ -11,7 +11,7 @@ LIBS=-lGL -ldl `sdl2-config --libs` `sdl2-config --cflags`
 
 SRCS=$(wildcard $(SRC_D)/*.cpp)
 SRCS+= $(IMGUI_D)/imgui.cpp $(IMGUI_D)/imgui_demo.cpp $(IMGUI_D)/imgui_draw.cpp $(IMGUI_D)/imgui_tables.cpp $(IMGUI_D)/imgui_widgets.cpp
-SRCS+= $(IMGUI_BACK_D)/imgui_impl_sdl.cpp $(IMGUI_BACK_D)/imgui_impl_opengl3.cpp
+SRCS+= $(IMGUI_BACK_D)/imgui_impl_sdl.cpp $(IMGUI_BACK_D)/imgui_impl_sdlrenderer.cpp
 OBJS=$(addprefix $(OBJ_D)/, $(addsuffix .o, $(basename $(notdir $(SRCS)))))
 BIN=$(BIN_D)/simulador
 ZIPNAME=T2_TR1_Luiz_190055171.zip
