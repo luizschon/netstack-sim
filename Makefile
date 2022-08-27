@@ -6,8 +6,8 @@ BIN_D=bin
 
 CXX=g++
 CXX_FLAGS=-std=c++14 -g -Wall
-CXX_FLAGS+=-I$(IMGUI_D) -I$(IMGUI_BACK_D) `sdl2-config --cflags`
-LIBS=-lGL -ldl `sdl2-config --libs`
+CXX_FLAGS+=-I$(IMGUI_D) -I$(IMGUI_BACK_D) -Iinclude
+LIBS=-lGL -ldl `sdl2-config --libs` `sdl2-config --cflags`
 
 SRCS=$(wildcard $(SRC_D)/*.cpp)
 SRCS+= $(IMGUI_D)/imgui.cpp $(IMGUI_D)/imgui_demo.cpp $(IMGUI_D)/imgui_draw.cpp $(IMGUI_D)/imgui_tables.cpp $(IMGUI_D)/imgui_widgets.cpp

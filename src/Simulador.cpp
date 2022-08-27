@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "../include/CamadaFisica.hpp"
-#include "../include/Common.hpp"
+#include "CamadaFisica.hpp"
+#include "Common.hpp"
 
 using namespace camada_fis;
 

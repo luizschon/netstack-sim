@@ -1,6 +1,6 @@
 #include <iostream>
 #include <unistd.h>
-#include "../include/Common.hpp"
+#include "Common.hpp"
 
 /* Recebe string e, para cada caracter (byte), insere bits
  * correspondentes no vetor de bits de retorno na ordem

@@ -4,3 +4,7 @@ obj
 
 # Ignora arquivo zip gerado para a submissão
 *.zip
+
+# Ignora arquivos gerados por compiledb
+compile_commands.json
+.cache
