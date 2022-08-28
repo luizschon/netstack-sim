@@ -106,10 +106,6 @@ Modulo::Modulo(tipos_codificacao tipo) {
     }
 } // fim do método construtor Modulo::Modulo
 
-Modulo::Modulo(Codificacao &codigo) {
-    this->codigo = &codigo;    
-} // fim do método construtor Modulo::Modulo
-
 void Modulo::setCodigo(tipos_codificacao tipo) {
     // Deleta codificação alocada caso exista
     if (this->codigo != nullptr)
@@ -128,9 +124,9 @@ void Modulo::setCodigo(tipos_codificacao tipo) {
     }
 } // fim do método Modulo::setCodigo
 
-void Modulo::setCodigo(Codificacao &codigo) {
-    this->codigo = &codigo;    
-} // fim do método Modulo::setCodigo
+void Modulo::setQuadro(std::vector<bit> &quadro) {
+    this->quadro = quadro;
+} // fim do método Modulo::setQuadro
 
 void Modulo::setSinal(std::vector<volt> &sinal) {
     this->sinal = sinal;
@@ -138,47 +134,29 @@ void Modulo::setSinal(std::vector<volt> &sinal) {
 
 std::vector<volt> Modulo::getSinal() {
     return this->sinal;
-} // fim do método Modulo::setCodigo
+} // fim do método Modulo::getSinal
+
+std::vector<bit> Modulo::getQuadro() {
+    return this->quadro; 
+} // fim do método Modulo::getQuadro
 
 Transmissor::Transmissor(tipos_codificacao tipo) 
 : Modulo(tipo) {} // fim do método construtor Transmissor::Transmissor
 
-Transmissor::Transmissor(Codificacao &codigo)
-: Modulo(codigo) {} // fim do método construtor Transmissor::Transmissor
-
 void Transmissor::geraSinal() {
-    this->sinal = this->codigo->codificar(this->quadro);
-} // fim do método Transmissor::getSinal
-
-void Transmissor::geraSinal(const std::string &mensagem) {
-    this->quadro = utils::string_para_bits(mensagem);
     this->sinal = this->codigo->codificar(this->quadro);
 } // fim do método Transmissor::getSinal
 
 Receptor::Receptor(tipos_codificacao tipo) 
 : Modulo(tipo) {} // fim do método construtor Receptor::Receptor
 
-Receptor::Receptor(Codificacao &codigo)
-: Modulo(codigo) {} // fim do método construtor Receptor::Receptor
-
-std::string Receptor::interpretaSinal() {
+void Receptor::geraQuadro() {
     this->quadro = this->codigo->decodificar(this->sinal);
-    return utils::bits_para_string(this->quadro);
-} // fim do método Receptor::interpretaSinal
+} // fim do método Receptor::geraQuadro
 
-MeioComunicacao::MeioComunicacao(tipos_codificacao tipo) {
-    this->transmissor = new Transmissor(tipo);
-    this->receptor = new Receptor(tipo);
-} // fim do método construtor MeioComunicacao::MeioComunicacao
-
-MeioComunicacao::MeioComunicacao(Transmissor *trans, Receptor *recep) {
-    this->transmissor = trans;
-    this->receptor = recep;
-} // fim do método construtor MeioComunicacao::MeioComunicacao
-
-void MeioComunicacao::transmitir() {
-    std::vector<volt> sinalTransmitido = this->transmissor->getSinal();
-    std::vector<volt> sinalRecebido = this->receptor->getSinal();
+void MeioComunicacao::transmitir(Transmissor *trans, Receptor *recep) {
+    std::vector<volt> sinalTransmitido = trans->getSinal();
+    std::vector<volt> sinalRecebido = recep->getSinal();
 
     sinalRecebido.clear();
     auto it = sinalTransmitido.begin();
@@ -187,11 +165,6 @@ void MeioComunicacao::transmitir() {
         sinalRecebido.push_back(*it);
         it++;
     }
-    receptor->setSinal(sinalRecebido);
+    recep->setSinal(sinalRecebido);
 } // fim do método MeioComunicacao::transmitir
-
-void MeioComunicacao::setCodigo(tipos_codificacao tipo) {
-    this->transmissor->setCodigo(tipo);
-    this->receptor->setCodigo(tipo);
-} // fim do método MeioComunicacao::setCodigo
 

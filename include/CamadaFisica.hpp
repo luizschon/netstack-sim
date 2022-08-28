@@ -62,17 +62,17 @@ namespace camada_fis {
      * as informações contidas no quadro. */
     class Modulo {
     public:
-        Modulo(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-        Modulo(Codificacao &codigo);
+        Modulo(tipos_codificacao tipo);
         Modulo() = default;
         ~Modulo() = default;
 
         // Setters para codificação e sinal
-        void setCodigo(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-        void setCodigo(Codificacao &codigo);
+        void setCodigo(tipos_codificacao tipo);
+        void setQuadro(std::vector<bit> &quadro);
         void setSinal(std::vector<volt> &sinal);
 
-        // Getter para signal
+        // Getters para quadro e sinal
+        std::vector<bit> getQuadro();
         std::vector<volt> getSinal();
 
     protected:
@@ -86,12 +86,10 @@ namespace camada_fis {
     class Transmissor : public Modulo {
     public:
         Transmissor(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-        Transmissor(Codificacao &codigo);
         Transmissor() = default;
         ~Transmissor() = default;
 
         void geraSinal();
-        void geraSinal(const std::string &mensagem);
     };
 
     /* Classe derivada de Modulo que implementa funcionalidades
@@ -99,29 +97,20 @@ namespace camada_fis {
     class Receptor : public Modulo {
     public:
         Receptor(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-        Receptor(Codificacao &codigo);
         Receptor() = default;
         ~Receptor() = default;
 
-        std::string interpretaSinal();
+        void geraQuadro();
     };
 
     /* Classe que implementa interface para transmissão de sinal
-     * de um transmissor para um receptor baseado no tipo de
-     * codificação especificado. */
+     * de um transmissor para um receptor */
     class MeioComunicacao {
     public:
-        MeioComunicacao(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-        MeioComunicacao(Transmissor *trans, Receptor *recep);        
         MeioComunicacao() = default;        
         ~MeioComunicacao() = default;        
 
-        void transmitir();
-        void setCodigo(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
-
-    private:
-        Transmissor *transmissor = nullptr;
-        Receptor *receptor = nullptr;
+        void transmitir(Transmissor *trans, Receptor *recep);
     };
 
 }
