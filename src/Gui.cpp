@@ -89,10 +89,7 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
          * codificação das mensagens. */
         {
             static int codigo = COD_BINARIA;  // Inicializa código como Binário por padrão
-            static char msg[256] = "";        // Mensagem recebida no input
-            static std::string msg_erro = ""; // Mensagem de erro
-            static bool show_plot = false;    // Booleano que controla visualização do plot
-            static bool erro = false;         // Booleano que controla visualização da mensagem de erro
+            static char msg[64] = "";         // Mensagem recebida no input
 
             // Inicia janela
             ImGui::Begin("Simulador camada física", 0, imgui_window_flags);
@@ -105,29 +102,11 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
             ImGui::RadioButton("Manchester"   , &codigo, COD_MANCHESTER); ImGui::SameLine();
             ImGui::RadioButton("Bipolar (AMI)", &codigo, COD_BIPOLAR);
             
-            // Inicia simulação ao pressionar botão
-            if (ImGui::Button("Simular")) {
-                if (strcmp(msg, "") != 0) {
-                    show_plot = true;
-                    erro = false;
-                    msg_erro = "";
-                } else {
-                    show_plot = false;
-                    erro = true;
-                    msg_erro = "Mensagem vazia!";
-                }
-            }
-            
             // Mostra plot do quadro e sinal caso exista uma mensagem
-            if (show_plot && strcmp(msg, "") != 0) {
+            if (strcmp(msg, "") != 0) {
                 gui::geraPlot(std::string(msg), (tipos_codificacao) codigo);
             }
 
-            // Mostra mensagem de erro caso a mensagem de input seja vazia
-            if (erro) {
-                ImGui::SameLine();
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Erro: %s", msg_erro.c_str());
-            }
             ImGui::End();
         }
 
@@ -163,7 +142,7 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
         // Nomeia e estabelece limite ao eixos para facilitar legibilidade
         ImPlot::SetupAxes("bit","valor");
         ImPlot::SetupAxisLimits(ImAxis_X1, -1, quadro.size() + 1, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 2);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 2, ImGuiCond_Always);
 
         // Plot em linha dos eixos calculados para o quadro
         ImPlot::PlotLine("Quadro", eixo_x, eixo_y, quadro.size() * amostras);
@@ -221,7 +200,7 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
         // Nomeia e estabelece limite ao eixos para facilitar legibilidade
         ImPlot::SetupAxes("bit","valor");
         ImPlot::SetupAxisLimits(ImAxis_X1, -1, quadro.size() + 1, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 2);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 2, ImGuiCond_Always);
         
         // Plot em linha dos eixos calculados para o quadro
         ImPlot::PlotLine("Quadro decodificado", eixo_x, eixo_y, quadro.size() * amostras);
