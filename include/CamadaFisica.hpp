@@ -62,9 +62,8 @@ namespace camada_fis {
      * as informações contidas no quadro. */
     class Modulo {
     public:
-        Modulo(tipos_codificacao tipo);
         Modulo() = default;
-        ~Modulo() = default;
+        ~Modulo();
 
         // Setters para codificação e sinal
         void setCodigo(tipos_codificacao tipo);
@@ -85,7 +84,6 @@ namespace camada_fis {
      * específicas do transmissor da camada física. */
     class Transmissor : public Modulo {
     public:
-        Transmissor(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
         Transmissor() = default;
         ~Transmissor() = default;
 
@@ -96,7 +94,6 @@ namespace camada_fis {
      * específicas do receptor da camada física. */
     class Receptor : public Modulo {
     public:
-        Receptor(tipos_codificacao tipo); // Valores possíveis: COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
         Receptor() = default;
         ~Receptor() = default;
 

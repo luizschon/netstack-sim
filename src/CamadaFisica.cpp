@@ -93,24 +93,14 @@ std::vector<bit> Bipolar::decodificar(std::vector<volt> &sinal) {
     return quadro;
 } // fim do método Bipolar::decodificar
 
-Modulo::Modulo(tipos_codificacao tipo) {
-    switch (tipo) {
-        case COD_BINARIA:
-            codigo = new Binaria();
-            break;
-        case COD_MANCHESTER:
-            codigo = new Manchester();
-            break;
-        case COD_BIPOLAR:
-            codigo = new Bipolar();
-            break;
-    }
-} // fim do método construtor Modulo::Modulo
+Modulo::~Modulo() {
+    delete codigo;
+} // fim do método destructor Modulo::~Modulo
 
 void Modulo::setCodigo(tipos_codificacao tipo) {
     // Deleta codificação alocada caso exista
-    if (this->codigo != nullptr)
-        delete this->codigo;
+    if (codigo != nullptr)
+        delete codigo;
 
     switch (tipo) {
         case COD_BINARIA:
@@ -141,15 +131,9 @@ std::vector<bit> Modulo::getQuadro() {
     return this->quadro; 
 } // fim do método Modulo::getQuadro
 
-Transmissor::Transmissor(tipos_codificacao tipo) 
-: Modulo(tipo) {} // fim do método construtor Transmissor::Transmissor
-
 void Transmissor::geraSinal() {
     this->sinal = this->codigo->codificar(this->quadro);
 } // fim do método Transmissor::getSinal
-
-Receptor::Receptor(tipos_codificacao tipo) 
-: Modulo(tipo) {} // fim do método construtor Receptor::Receptor
 
 void Receptor::geraQuadro() {
     this->quadro = this->codigo->decodificar(this->sinal);

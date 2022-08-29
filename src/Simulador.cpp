@@ -13,6 +13,16 @@ Pilha::Pilha() {
     meio = new camada_fis::MeioComunicacao;
 } // fim do método construtor Pilha::Pilha
 
+/* Método destrutor da Pilha da simulação, deleta blocos
+ * de memória alocados. */
+Pilha::~Pilha() {
+    delete trans_aplicacao;
+    delete recep_aplicacao;
+    delete trans_fisico;
+    delete recep_fisico;
+    delete meio;
+} // fim do método construtor Pilha::~Pilha
+
 void Pilha::setCodigo(tipos_codificacao tipo) {
     trans_fisico->setCodigo(tipo);
     recep_fisico->setCodigo(tipo);

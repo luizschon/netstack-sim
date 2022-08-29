@@ -168,8 +168,8 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
         // Plot em linha dos eixos calculados para o quadro
         ImPlot::PlotLine("Quadro", eixo_x, eixo_y, quadro.size() * amostras);
 
-        delete eixo_x;
-        delete eixo_y;
+        delete[] eixo_x;
+        delete[] eixo_y;
 
         ImPlot::EndPlot();
     }
@@ -204,8 +204,8 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
         // Plot em linha dos eixos calculados para o sinal
         ImPlot::PlotLine("Sinal", eixo_x, eixo_y, sinal.size() * amostras);
 
-        delete eixo_x;
-        delete eixo_y;
+        delete[] eixo_x;
+        delete[] eixo_y;
 
         ImPlot::EndPlot();
     }
@@ -226,12 +226,13 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
         // Plot em linha dos eixos calculados para o quadro
         ImPlot::PlotLine("Quadro decodificado", eixo_x, eixo_y, quadro.size() * amostras);
 
-        delete eixo_x;
-        delete eixo_y;
+        delete[] eixo_x;
+        delete[] eixo_y;
 
         ImPlot::EndPlot();
     }
-
+    
+    delete pilha;
 }
 
 /* Função responsável por destruir a janela e o contexto

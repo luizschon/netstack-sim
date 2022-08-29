@@ -15,6 +15,7 @@ namespace sim {
     class Pilha {
     public:
         Pilha();
+        ~Pilha();
 
         void simula(const std::string &msg, tipos_codificacao tipo);
         
@@ -41,6 +42,7 @@ namespace sim {
         // String de input e output
         std::string input, output;
 
+        // Quadros e sinais gerados durante a simulação
         std::vector<bit> quadro_input, quadro_output;
         std::vector<volt> sinal_input, sinal_output;
     };
