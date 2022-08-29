@@ -8,3 +8,6 @@ obj
 # Ignora arquivos gerados por compiledb
 compile_commands.json
 .cache
+
+# Ignora arquivos gerados pelo imgui
+imgui.ini
