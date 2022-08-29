@@ -1,5 +1,4 @@
 #include <iostream>
-#include <unistd.h>
 #include "Common.hpp"
 
 /* Recebe string e, para cada caracter (byte), insere bits
@@ -80,3 +79,91 @@ void utils::print_bits(std::vector<bit> &trem_de_bits) {
     std::cout << "\n";
 } // fim da função print_bits
 
+/* Função que gera vetor de valores para o eixo X do plot do quadro.
+ *
+ * Como o vetor original não geraria uma onda quadrada para o plot,
+ * um número de amostras e recebido por parâmetro para prolongar a
+ * onda. */
+float * utils::geraEixoX(std::vector<bit> &trem_de_bits, int amostras) {
+    int tam = trem_de_bits.size() * amostras;
+
+    float step = (float) 1/amostras;
+    float val = 0;
+
+    float *eixo_x = new float[tam];
+
+    for (int a = 0; a < tam; a++) {
+        eixo_x[a] = val;
+        val += step;
+    }
+    return eixo_x;
+} // fim do método utils::geraEixoX;
+
+/* Função que gera vetor de valores para o eixo Y para cada valor
+ * de X do plot do quadro.
+ *
+ * Como o vetor original não geraria uma onda quadrada para o plot,
+ * um número de amostras e recebido por parâmetro para prolongar a
+ * onda. */
+float * utils::geraEixoY(std::vector<bit> &trem_de_bits, int amostras) {
+    int tam = trem_de_bits.size() * amostras;
+    int idx = 0;
+
+    float * eixo_y = new float[tam];
+
+    for (auto b : trem_de_bits) {
+        for (int a = 0; a < amostras; a++) {
+           eixo_y[idx] = b; 
+           idx++;
+        }
+    }
+    return eixo_y;
+} // fim do método utils::geraEixoY;
+
+/* Função que gera vetor de valores para o eixo X do plot do sinal.
+ *
+ * Como o vetor original não geraria uma onda quadrada para o plot,
+ * um número de amostras e recebido por parâmetro para prolongar a
+ * onda. */
+float * utils::geraEixoX(std::vector<volt> &sinal, int amostras, tipos_codificacao tipo) {
+    int tam = sinal.size() * amostras;
+
+    float step = (float) 1/amostras;
+    float val = 0;
+
+    /* Caso a codificação Manchester esteja sendo usada, dimunui o 
+     * step pela metade, já que o sinal gerado possui o dobro de
+     * informação se comparado com o quadro original. */
+    if (tipo == COD_MANCHESTER) {
+        step = step/2;
+    }
+
+    float *eixo_x = new float[tam];
+
+    for (int a = 0; a < tam; a++) {
+        eixo_x[a] = val;
+        val += step;
+    }
+    return eixo_x;
+} // fim do método utils::geraEixoX;
+
+/* Função que gera vetor de valores para o eixo Y para cada valor
+ * de X do plot do sinal.
+ *
+ * Como o vetor original não geraria uma onda quadrada para o plot,
+ * um número de amostras e recebido por parâmetro para prolongar a
+ * onda. */
+float * utils::geraEixoY(std::vector<volt> &sinal, int amostras) {
+    int tam = sinal.size() * amostras;
+    int idx = 0;
+
+    float * eixo_y = new float[tam];
+
+    for (auto b : sinal) {
+        for (int a = 0; a < amostras; a++) {
+           eixo_y[idx] = b; 
+            idx++;
+        }
+    }
+    return eixo_y;
+} // fim do método utils::geraEixoY;

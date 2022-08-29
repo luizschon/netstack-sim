@@ -1,5 +1,3 @@
-#include <iostream>
-#include "Simulador.hpp"
 #include "Gui.hpp"
 
 int main(int argc, char **argv) {
@@ -9,6 +7,5 @@ int main(int argc, char **argv) {
         gui::mainLoop(w_info);
         gui::shutdown(w_info);
     }
-
     return 0;
 } // fim da função main

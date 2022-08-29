@@ -7,7 +7,7 @@
 namespace gui {
 
     /* Struct que armazena variáveis importantes para criar 
-     * janela e contexto gráfico da interface. */
+     * janela e contexto gráfico da interface do simulador. */
     struct WindowInfo {
         SDL_Window *window; 
         SDL_GLContext gl_context;

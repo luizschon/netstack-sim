@@ -1,10 +1,10 @@
 #include "Simulador.hpp"
-#include "CamadaFisica.hpp"
-#include "CamadaAplicacao.hpp"
-#include "Common.hpp"
 
 using namespace sim;
 
+/* Método construtor da Pilha da simulação, aloca memória
+ * para os elementos trasmissores e receptores que serão
+ * usados durante a simulação. */
 Pilha::Pilha() {
     trans_aplicacao = new camada_apl::Transmissor;
     recep_aplicacao = new camada_apl::Receptor;

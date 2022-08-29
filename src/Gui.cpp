@@ -1,7 +1,4 @@
-#include <iostream>
-#include <cstring>
 #include <string>
-#include <tuple>
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_opengl3.h>
@@ -55,7 +52,9 @@ gui::WindowInfo * gui::init() {
     return window_info;
 }
 
-/* Main loop da aplicação gráfica do simulador. */
+/* Main loop da aplicação gráfica do simulador. Contém maior parte do
+ * codigo para gerar elementos gráficos com que o usuário pode
+ * interagir. */
 void gui::mainLoop(gui::WindowInfo *window_info) {
     ImGuiWindowFlags imgui_window_flags = (ImGuiWindowFlags) (ImGuiWindowFlags_NoTitleBar
                                                             | ImGuiWindowFlags_NoResize);
@@ -119,8 +118,8 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
                 }
             }
             
-            // Mostra plot do quadro e sinal
-            if (show_plot) {
+            // Mostra plot do quadro e sinal caso exista uma mensagem
+            if (show_plot && strcmp(msg, "") != 0) {
                 gui::geraPlot(std::string(msg), (tipos_codificacao) codigo);
             }
 
@@ -132,67 +131,111 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
             ImGui::End();
         }
 
-        // Renderiza janela
+        // Renderização da janela
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window_info->window);
     }
 }
 
+/* Função que gera plots para quadros de entrada/saída e sinal
+ * codificado a partir da simulação da pilha de protocolos 
+ * simulada usando a mensagem e o tipo de codificação passados
+ * como argumento. */
 void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
+    // Inicializa pilha e simula usando valores recebidos como argumento
     sim::Pilha *pilha = new sim::Pilha;
     pilha->simula(msg, codigo);
-    int delta = 1;
 
+    static int amostras = 100; // Número de amostras por valor dos vetores do quadro/sinal
+
+    // Imprime mensagem recebida pela camada de aplicação receptora
+    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Mensagem recebida: %s", pilha->getOutput().c_str());
+
+    /* Inicia plot do quadro composto pelos bits da mensagem. */
     if (ImPlot::BeginPlot("Quadro")) {
         auto quadro = pilha->getQuadroInput();
-        float eixo_x[quadro.size() * delta];
-        float eixo_y[quadro.size() * delta];
+        
+        // Calcula eixo X e Y para o plot em linha
+        float * eixo_x = utils::geraEixoX(quadro, amostras);
+        float * eixo_y = utils::geraEixoY(quadro, amostras);
 
-        for (unsigned int i = 0; i < quadro.size(); i++) {
-                eixo_x[i] = i;
-                eixo_y[i] = quadro[i];
-        }
+        // Nomeia e estabelece limite ao eixos para facilitar legibilidade
+        ImPlot::SetupAxes("bit","valor");
+        ImPlot::SetupAxisLimits(ImAxis_X1, -1, quadro.size() + 1, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 2);
 
-        ImPlot::SetupAxes("tempo","bit");
-        ImPlot::PlotLine("Quadro", eixo_x, eixo_y, quadro.size() * delta);
+        // Plot em linha dos eixos calculados para o quadro
+        ImPlot::PlotLine("Quadro", eixo_x, eixo_y, quadro.size() * amostras);
+
+        delete eixo_x;
+        delete eixo_y;
+
         ImPlot::EndPlot();
     }
 
+    /* Inicia plot do sinal gerado pela codificação do quadro. */
     if (ImPlot::BeginPlot("Sinal")) {
         auto sinal = pilha->getSinalInput();
-        float eixo_x[sinal.size() * delta];
-        float eixo_y[sinal.size() * delta];
 
-        for (unsigned int i = 0; i < sinal.size(); i++) {
-                eixo_x[i] = i;
-                eixo_y[i] = sinal[i];
+        // Calcula eixo X e Y para o plot em linha
+        float * eixo_x = utils::geraEixoX(sinal, amostras, codigo);
+        float * eixo_y = utils::geraEixoY(sinal, amostras);
+
+        // Nomeia os eixos para facilitar legibilidade
+        ImPlot::SetupAxes("tempo","Volts");
+
+        /* Caso a codificação seja Manchester, reduz o limite do eixo X pela metade, 
+         * já que o sinal resultante tem o dobro de informação. */
+        if (codigo == COD_MANCHESTER) {
+            ImPlot::SetupAxisLimits(ImAxis_X1, -1, (float) sinal.size()/2 + 1, ImGuiCond_Always);
+        } else {
+            ImPlot::SetupAxisLimits(ImAxis_X1, -1, sinal.size() + 1, ImGuiCond_Always);
         }
 
-        ImPlot::SetupAxes("tempo","Volts");
-        ImPlot::PlotLine("Sinal", eixo_x, eixo_y, sinal.size() * delta);
+        /* Caso a codificação seja bipolar, muda o limite do eixo Y para mostra
+         * valores negativos. */ 
+        if (codigo == COD_BIPOLAR) {
+            ImPlot::SetupAxisLimits(ImAxis_Y1, -7, 7, ImGuiCond_Always);
+        } else {
+            ImPlot::SetupAxisLimits(ImAxis_Y1, -3, 8, ImGuiCond_Always);
+        }
+
+        // Plot em linha dos eixos calculados para o sinal
+        ImPlot::PlotLine("Sinal", eixo_x, eixo_y, sinal.size() * amostras);
+
+        delete eixo_x;
+        delete eixo_y;
+
         ImPlot::EndPlot();
     }
 
+    /* Inicia plot do quadro gerado pela decodificação do sinal. */
     if (ImPlot::BeginPlot("Quadro decodificado")) {
         auto quadro = pilha->getQuadroOutput();
-        float eixo_x[quadro.size() * delta];
-        float eixo_y[quadro.size() * delta];
+        
+        // Calcula eixo X e Y para o plot em linha
+        float * eixo_x = utils::geraEixoX(quadro, amostras);
+        float * eixo_y = utils::geraEixoY(quadro, amostras);
 
-        for (unsigned int i = 0; i < quadro.size(); i++) {
-                eixo_x[i] = i;
-                eixo_y[i] = quadro[i];
-        }
+        // Nomeia e estabelece limite ao eixos para facilitar legibilidade
+        ImPlot::SetupAxes("bit","valor");
+        ImPlot::SetupAxisLimits(ImAxis_X1, -1, quadro.size() + 1, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, -1, 2);
+        
+        // Plot em linha dos eixos calculados para o quadro
+        ImPlot::PlotLine("Quadro decodificado", eixo_x, eixo_y, quadro.size() * amostras);
 
-        ImPlot::SetupAxes("tempo","bit");
-        ImPlot::PlotLine("Quadro decodificado", eixo_x, eixo_y, quadro.size() * delta);
+        delete eixo_x;
+        delete eixo_y;
+
         ImPlot::EndPlot();
     }
-
-    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Mensagem recebida: %s", pilha->getOutput().c_str());
 
 }
 
+/* Função responsável por destruir a janela e o contexto
+ * gráfico criados na função gui::init. */
 void gui::shutdown(gui::WindowInfo *window_info) {
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();

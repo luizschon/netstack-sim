@@ -54,6 +54,12 @@ namespace utils {
     // Função de debug 
     void print_bits(std::vector<bit> &trem_de_bits);
 
+    // Funções para gerar os eixos para o plot
+    float * geraEixoX(std::vector<bit> &trem_de_bits, int amostras);
+    float * geraEixoY(std::vector<bit> &trem_de_bits, int amostras);
+    float * geraEixoX(std::vector<volt> &sinal, int amostras, tipos_codificacao tipo);
+    float * geraEixoY(std::vector<volt> &sinal, int amostras);
+
 };
 
 #endif // __COMMON_HPP
