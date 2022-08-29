@@ -1,14 +1,15 @@
+#include <iostream>
 #include <cstring>
 #include <string>
-#include <iostream>
+#include <tuple>
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_opengl3.h>
 #include <implot.h>
 #include <SDL_opengl.h>
 
-#include "Common.hpp"
 #include "Gui.hpp"
+#include "Simulador.hpp"
 
 /* Função que inicializa janela e contexto gráfico do SDL e ImGui
  * para criar a GUI do simulador. */
@@ -120,15 +121,13 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
             
             // Mostra plot do quadro e sinal
             if (show_plot) {
-                if (ImPlot::BeginPlot("My Plot")) {
-                    ImPlot::EndPlot();
-                }
+                gui::geraPlot(std::string(msg), (tipos_codificacao) codigo);
             }
 
             // Mostra mensagem de erro caso a mensagem de input seja vazia
             if (erro) {
                 ImGui::SameLine();
-                ImGui::Text("Erro: %s", msg_erro.c_str());               // Display some text (you can use a format strings too)
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Erro: %s", msg_erro.c_str());
             }
             ImGui::End();
         }
@@ -138,6 +137,60 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window_info->window);
     }
+}
+
+void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
+    sim::Pilha *pilha = new sim::Pilha;
+    pilha->simula(msg, codigo);
+    int delta = 1;
+
+    if (ImPlot::BeginPlot("Quadro")) {
+        auto quadro = pilha->getQuadroInput();
+        float eixo_x[quadro.size() * delta];
+        float eixo_y[quadro.size() * delta];
+
+        for (unsigned int i = 0; i < quadro.size(); i++) {
+                eixo_x[i] = i;
+                eixo_y[i] = quadro[i];
+        }
+
+        ImPlot::SetupAxes("tempo","bit");
+        ImPlot::PlotLine("Quadro", eixo_x, eixo_y, quadro.size() * delta);
+        ImPlot::EndPlot();
+    }
+
+    if (ImPlot::BeginPlot("Sinal")) {
+        auto sinal = pilha->getSinalInput();
+        float eixo_x[sinal.size() * delta];
+        float eixo_y[sinal.size() * delta];
+
+        for (unsigned int i = 0; i < sinal.size(); i++) {
+                eixo_x[i] = i;
+                eixo_y[i] = sinal[i];
+        }
+
+        ImPlot::SetupAxes("tempo","Volts");
+        ImPlot::PlotLine("Sinal", eixo_x, eixo_y, sinal.size() * delta);
+        ImPlot::EndPlot();
+    }
+
+    if (ImPlot::BeginPlot("Quadro decodificado")) {
+        auto quadro = pilha->getQuadroOutput();
+        float eixo_x[quadro.size() * delta];
+        float eixo_y[quadro.size() * delta];
+
+        for (unsigned int i = 0; i < quadro.size(); i++) {
+                eixo_x[i] = i;
+                eixo_y[i] = quadro[i];
+        }
+
+        ImPlot::SetupAxes("tempo","bit");
+        ImPlot::PlotLine("Quadro decodificado", eixo_x, eixo_y, quadro.size() * delta);
+        ImPlot::EndPlot();
+    }
+
+    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Mensagem recebida: %s", pilha->getOutput().c_str());
+
 }
 
 void gui::shutdown(gui::WindowInfo *window_info) {

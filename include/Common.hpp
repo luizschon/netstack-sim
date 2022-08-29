@@ -35,6 +35,8 @@ typedef enum {
     COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
 } tipos_codificacao;
 
+typedef std::pair<float*, float*> eixos;
+
 namespace utils {
 
     // Operação que transforma string em um trem de bits.
@@ -49,6 +51,7 @@ namespace utils {
     std::string bytes_para_string(std::vector<byte> &bytes);
     std::string bits_para_string(std::vector<bit> &trem_de_bits);
 
+    // Função de debug 
     void print_bits(std::vector<bit> &trem_de_bits);
 
 };

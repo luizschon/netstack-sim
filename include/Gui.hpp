@@ -1,6 +1,7 @@
 #ifndef __GUI_HPP
 #define __GUI_HPP
 
+#include "Common.hpp"
 #include <SDL.h>
 
 namespace gui {
@@ -14,6 +15,7 @@ namespace gui {
   
     WindowInfo * init();
     void mainLoop(WindowInfo *window_info);
+    void geraPlot(std::string msg, tipos_codificacao codigo);
     void shutdown(WindowInfo *window_info);
 
 }
