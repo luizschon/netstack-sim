@@ -71,9 +71,9 @@ std::vector<volt> Bipolar::codificar(std::vector<bit> &quadro) {
                 val = PULSO_POS;
             else
                 val = PULSO_NEG;
+            contador++;
         }
         sinal.push_back(val);
-        contador++;
     }
     return sinal;
 } // fim do método Bipolar::codificar
