@@ -10,6 +10,11 @@
 apt-get install libsdl2-dev g++ make
 ```
 
+## Clonando o repositório Git
+```
+prompt> git clone --recurse-submodules https://github.com/luizschonarth/simulador_TR1_2022-1.git
+```
+
 ## Como compilar e rodar o simulador
 
 ### Modo debug
