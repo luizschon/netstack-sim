@@ -6,7 +6,7 @@ OBJ_D=obj
 BIN_D=bin
 
 CXX=g++
-CXX_FLAGS=-std=c++14 -g -Wall -Wformat
+CXX_FLAGS=-std=c++14 -g -Wall -Wformat -fsanitize=address -fno-omit-frame-pointer
 I_FLAGS=-I$(IMGUI_D) -I$(IMGUI_BACK_D) -I$(IMPLOT_D) -Iinclude  `sdl2-config --cflags`
 CFLAGS=$(CXXFLAGS)
 LIBS=-lGL -ldl `sdl2-config --libs`
