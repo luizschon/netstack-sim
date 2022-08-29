@@ -18,7 +18,7 @@ SRCS+=$(IMPLOT_D)/implot.cpp $(IMPLOT_D)/implot_items.cpp
 OBJS=$(addprefix $(OBJ_D)/, $(addsuffix .o, $(basename $(notdir $(SRCS)))))
 BIN=$(BIN_D)/simulador
 ZIPNAME=T2_TR1_Luiz_190055171.zip
-ZIPIGNORE=./obj/\* ./bin/\* ./.cache/\* ./compile_commands.json ./imgui.ini 
+ZIPIGNORE=./obj/\* ./bin/\* ./.cache/\* ./compile_commands.json ./imgui.ini ./.git/\* ./.git\*
 
 all: $(BIN)
 
@@ -52,7 +52,7 @@ mkobj:
 	mkdir -p $(OBJ_D)
 
 clean:
-	rm -rf $(BIN_D) $(OBJ_D)
+	rm -rf $(BIN_D) $(OBJ_D) imgui.ini
 
 submit:
 	rm -f $(ZIPNAME)
