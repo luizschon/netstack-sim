@@ -16,7 +16,6 @@ namespace camada_apl {
         // Setters e getters para variáveis
         void setMensagem(const std::string mensagem);
         std::string getMensagem();
-        tipos_codificacao getCodigo();
 
     private:
         std::string mensagem;
