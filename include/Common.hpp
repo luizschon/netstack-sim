@@ -35,6 +35,12 @@ typedef enum {
     COD_BINARIA, COD_MANCHESTER, COD_BIPOLAR
 } tipos_codificacao;
 
+/* Enumerador para tornar a seleção do tipo de enquadramento
+ * mais legível no código. */
+typedef enum {
+    CONTAGEM_DE_CARAC, INSERCAO_DE_BYTES
+} tipos_enquadramento;
+
 typedef std::pair<float*, float*> eixos;
 
 namespace utils {

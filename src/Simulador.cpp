@@ -6,11 +6,13 @@ using namespace sim;
  * para os elementos trasmissores e receptores que serão
  * usados durante a simulação. */
 Pilha::Pilha() {
-    trans_aplicacao = new camada_apl::Transmissor;
-    recep_aplicacao = new camada_apl::Receptor;
-    trans_fisico = new camada_fis::Transmissor;
-    recep_fisico  = new camada_fis::Receptor;
-    meio = new camada_fis::MeioComunicacao;
+    trans_aplicacao = new aplicacao::Transmissor;
+    recep_aplicacao = new aplicacao::Receptor;
+    trans_enlace = new enlace::Transmissor;
+    recep_enlace = new enlace::Receptor;
+    trans_fisico = new fisica::Transmissor;
+    recep_fisico  = new fisica::Receptor;
+    meio = new fisica::MeioComunicacao;
 } // fim do método construtor Pilha::Pilha
 
 /* Método destrutor da Pilha da simulação, deleta blocos
@@ -18,10 +20,17 @@ Pilha::Pilha() {
 Pilha::~Pilha() {
     delete trans_aplicacao;
     delete recep_aplicacao;
+    delete trans_enlace;
+    delete recep_enlace;
     delete trans_fisico;
     delete recep_fisico;
     delete meio;
 } // fim do método construtor Pilha::~Pilha
+
+void Pilha::setEnquadramento(tipos_enquadramento tipo) {
+    trans_enlace->setEnquadramento(tipo);
+    recep_enlace->setEnquadramento(tipo);
+} // fim do método Pilha::setEnquadramento
 
 void Pilha::setCodigo(tipos_codificacao tipo) {
     trans_fisico->setCodigo(tipo);
@@ -33,7 +42,7 @@ void Pilha::setCodigo(tipos_codificacao tipo) {
  * e transmití-lo através do meio de comunicação. */
 void Pilha::enviaMensagem() {
     trans_aplicacao->setMensagem(input);
-    trans_aplicacao->transmitir(trans_fisico);
+    trans_aplicacao->transmitir(trans_enlace);
     trans_fisico->geraSinal();
 
     // Salva resultados nos atributos privados
@@ -48,11 +57,14 @@ void Pilha::enviaMensagem() {
  * dos bits do quadro, e inserir o resultado na string de output. */
 void Pilha::recebeMensagem() {
     recep_fisico->geraQuadro();
+    recep_enlace->receber(recep_fisico);
 
-    recep_aplicacao->receber(recep_fisico);
+    recep_enlace->geraTremDeBits();
+    recep_aplicacao->receber(recep_enlace);
 
     // Salva resultados nos atributos privados
-    quadro_output = recep_fisico->getQuadro();
+    bits_output = recep_enlace->getTremDeBits();
+    quadro_output = recep_enlace->getQuadro();
     sinal_output = recep_fisico->getSinal();
     output = recep_aplicacao->getMensagem();
 } // fim do método Pilha::recebeMensagem
@@ -61,9 +73,10 @@ void Pilha::recebeMensagem() {
  * do usuário e simular a comunicação entre transmissores e 
  * receptores implementados na pilha. os resultados são armazenados
  * nos atributos privados da instância de Pilha. */
-void Pilha::simula(const std::string &msg, tipos_codificacao tipo) {
+void Pilha::simula(const std::string &msg, tipos_enquadramento tipo_enq, tipos_codificacao tipo_cod) {
     input = msg;
-    setCodigo(tipo);
+    setEnquadramento(tipo_enq);
+    setCodigo(tipo_cod);
 
     enviaMensagem();
     recebeMensagem();
@@ -76,6 +89,14 @@ std::string Pilha::getInput() {
 std::string Pilha::getOutput() {
     return output;
 } // fim do método Pilha::getOutput
+
+std::vector<bit> Pilha::getTremDeBitsInput() {
+    return bits_input;
+} // fim do método Pilha::getTremDeBitsInput
+ 
+std::vector<bit> Pilha::getTremDeBitsOutput() {
+    return bits_output;
+} // fim do método Pilha::getTremDeBitsInput
 
 std::vector<bit> Pilha::getQuadroInput() {
     return quadro_input;

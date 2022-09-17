@@ -2,6 +2,7 @@
 #define __SIMULADOR_HPP
 
 #include "CamadaAplicacao.hpp"
+#include "CamadaEnlace.hpp"
 #include "CamadaFisica.hpp"
 
 namespace sim {
@@ -17,33 +18,39 @@ namespace sim {
         Pilha();
         ~Pilha();
 
-        void simula(const std::string &msg, tipos_codificacao tipo);
+        void simula(const std::string &msg, tipos_enquadramento tipo_enq, tipos_codificacao tipo_cod);
         
         // Getters para atributos da simulação
         std::string getOutput();
         std::string getInput();
         std::vector<bit> getQuadroInput();
         std::vector<bit> getQuadroOutput();
+        std::vector<bit> getTremDeBitsInput();
+        std::vector<bit> getTremDeBitsOutput();
         std::vector<volt> getSinalInput();
         std::vector<volt> getSinalOutput();
 
     private:
+        void setEnquadramento(tipos_enquadramento tipo);
         void setCodigo(tipos_codificacao tipo);
         void enviaMensagem();
         void recebeMensagem();
 
         // Modulos que compões a pilha de comunicação sendo implementada
-        camada_apl::Transmissor *trans_aplicacao = nullptr;
-        camada_apl::Receptor *recep_aplicacao = nullptr;
-        camada_fis::Transmissor *trans_fisico = nullptr;
-        camada_fis::Receptor *recep_fisico = nullptr;
-        camada_fis::MeioComunicacao *meio = nullptr;
+        aplicacao::Transmissor *trans_aplicacao = nullptr;
+        aplicacao::Receptor *recep_aplicacao = nullptr;
+        enlace::Transmissor *trans_enlace = nullptr;
+        enlace::Receptor *recep_enlace = nullptr;
+        fisica::Transmissor *trans_fisico = nullptr;
+        fisica::Receptor *recep_fisico = nullptr;
+        fisica::MeioComunicacao *meio = nullptr;
 
         // String de input e output
         std::string input, output;
 
         // Quadros e sinais gerados durante a simulação
         std::vector<bit> quadro_input, quadro_output;
+        std::vector<bit> bits_input, bits_output;
         std::vector<volt> sinal_input, sinal_output;
     };
 

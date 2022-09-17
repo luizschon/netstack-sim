@@ -1,6 +1,6 @@
 #include "CamadaAplicacao.hpp"
 
-using namespace camada_apl;
+using namespace aplicacao;
 
 void Modulo::setMensagem(const std::string mensagem) {
     this->mensagem = mensagem;
@@ -12,14 +12,14 @@ std::string Modulo::getMensagem() {
 
 /* Transforma mensagem em quadro (composto de bits) e transmite
  * para o transmissor da camada física. */
-void Transmissor::transmitir(camada_fis::Transmissor *transmissor) {
-    std::vector<bit> quadro = utils::string_para_bits(this->getMensagem());
-    transmissor->setQuadro(quadro);
+void Transmissor::transmitir(enlace::Transmissor *transmissor) {
+    std::vector<bit> trem_de_bits = utils::string_para_bits(this->getMensagem());
+    transmissor->setTremDeBits(trem_de_bits);
 } // fim do método Transmissor::transmitir
 
 /* Recebe um quadro (composto de bits) do receptor da camada
  * física e traduz para uma string. */
-void Receptor::receber(camada_fis::Receptor *receptor) {
+void Receptor::receber(enlace::Receptor *receptor) {
     std::vector<bit> quadro = receptor->getQuadro();
     std::string mensagem = utils::bits_para_string(quadro);
     this->setMensagem(mensagem);

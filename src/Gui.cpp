@@ -88,14 +88,21 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
          * inseridos pelo usuário e mostra plot do quadro e sinais resultantes da
          * codificação das mensagens. */
         {
-            static int codigo = COD_BINARIA;  // Inicializa código como Binário por padrão
-            static char msg[64] = "";         // Mensagem recebida no input
+            static int codigo = COD_BINARIA;              // Inicializa código como Binário por padrão
+            static int enquadramento = CONTAGEM_DE_CARAC; // Inicializa enquadramento como Contagem de Caracteres por padrão
+            static char msg[64] = "";                     // Mensagem recebida no input
 
             // Inicia janela
             ImGui::Begin("Simulador camada física", 0, imgui_window_flags);
             
             ImGui::Text("Simulador de camada física da disciplina de Teleinformática e Redes 1 - UnB");
             ImGui::InputTextWithHint("Escreva sua mensagem", "Max 256 caracteres", msg, IM_ARRAYSIZE(msg));
+
+            // Botões do tipo radio para selecionar enquadramento
+            ImGui::RadioButton("Contagem de Caracteres", &enquadramento, CONTAGEM_DE_CARAC); ImGui::SameLine();
+            ImGui::RadioButton("Inserção de Bytes", &enquadramento, INSERCAO_DE_BYTES);
+            
+            ImGui::NewLine();
 
             // Botões do tipo radio para selecionar codificação
             ImGui::RadioButton("Binária (NRZ)", &codigo, COD_BINARIA); ImGui::SameLine();
@@ -104,7 +111,7 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
             
             // Mostra plot do quadro e sinal caso exista uma mensagem
             if (strcmp(msg, "") != 0) {
-                gui::geraPlot(std::string(msg), (tipos_codificacao) codigo);
+                gui::geraPlot(std::string(msg), (tipos_enquadramento) enquadramento, (tipos_codificacao) codigo);
             }
 
             ImGui::End();
@@ -121,10 +128,10 @@ void gui::mainLoop(gui::WindowInfo *window_info) {
  * codificado a partir da simulação da pilha de protocolos 
  * simulada usando a mensagem e o tipo de codificação passados
  * como argumento. */
-void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
+void gui::geraPlot(std::string msg, tipos_enquadramento tipo_enq, tipos_codificacao tipo_cod) {
     // Inicializa pilha e simula usando valores recebidos como argumento
     sim::Pilha *pilha = new sim::Pilha;
-    pilha->simula(msg, codigo);
+    pilha->simula(msg, tipo_enq, tipo_cod);
 
     static int amostras = 100; // Número de amostras por valor dos vetores do quadro/sinal
 
@@ -158,7 +165,7 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
         auto sinal = pilha->getSinalInput();
 
         // Calcula eixo X e Y para o plot em linha
-        float * eixo_x = utils::geraEixoX(sinal, amostras, codigo);
+        float * eixo_x = utils::geraEixoX(sinal, amostras, tipo_cod);
         float * eixo_y = utils::geraEixoY(sinal, amostras);
 
         // Nomeia os eixos para facilitar legibilidade
@@ -166,7 +173,7 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
 
         /* Caso a codificação seja Manchester, reduz o limite do eixo X pela metade, 
          * já que o sinal resultante tem o dobro de informação. */
-        if (codigo == COD_MANCHESTER) {
+        if (tipo_cod == COD_MANCHESTER) {
             ImPlot::SetupAxisLimits(ImAxis_X1, -1, (float) sinal.size()/2 + 1, ImGuiCond_Always);
         } else {
             ImPlot::SetupAxisLimits(ImAxis_X1, -1, sinal.size() + 1, ImGuiCond_Always);
@@ -174,7 +181,7 @@ void gui::geraPlot(std::string msg, tipos_codificacao codigo) {
 
         /* Caso a codificação seja bipolar, muda o limite do eixo Y para mostra
          * valores negativos. */ 
-        if (codigo == COD_BIPOLAR) {
+        if (tipo_cod == COD_BIPOLAR) {
             ImPlot::SetupAxisLimits(ImAxis_Y1, -7, 7, ImGuiCond_Always);
         } else {
             ImPlot::SetupAxisLimits(ImAxis_Y1, -3, 8, ImGuiCond_Always);

@@ -27,32 +27,38 @@ release: CFLAGS=$(CXXFLAGS)
 release: clean $(BIN)
 
 $(BIN): $(OBJS) mkbin
-	$(CXX) $(CXX_FLAGS) $(OBJS) $(LIBS) -o $@
+	@echo "Gerando binario"
+	@$(CXX) $(CXX_FLAGS) $(OBJS) $(LIBS) -o $@
 	@echo "Build completa!"
 	@echo "Rode com bin/simulador"
 
 $(OBJ_D)/%.o: $(SRC_D)/%.cpp | mkobj
-	$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
+	@echo Compilando $<
+	@$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
 
 $(OBJ_D)/%.o: $(IMGUI_D)/%.cpp | mkobj
-	$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
+	@echo Compilando $<
+	@$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
 
 $(OBJ_D)/%.o: $(IMGUI_BACK_D)/%.cpp | mkobj
-	$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
+	@echo Compilando $<
+	@$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
 
 $(OBJ_D)/%.o: $(IMPLOT_D)/%.cpp | mkobj
-	$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
+	@echo Compilando $<
+	@$(CXX) $(CXX_FLAGS) $(I_FLAGS) -c $< -o $@
 
 .PHONY: mkbin mkobj clean submit
 
 mkbin:
-	mkdir -p $(BIN_D)
+	@mkdir -p $(BIN_D)
 
 mkobj:
-	mkdir -p $(OBJ_D)
+	@mkdir -p $(OBJ_D)
 
 clean:
 	rm -rf $(BIN_D) $(OBJ_D) imgui.ini
+	@echo "Limpeza completa"
 
 submit:
 	rm -f $(ZIPNAME)

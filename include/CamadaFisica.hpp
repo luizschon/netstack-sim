@@ -1,11 +1,9 @@
 #ifndef __CAMADA_FISICA_HPP
 #define __CAMADA_FISICA_HPP
 
-#include <string>
-#include <vector>
 #include "Common.hpp"
 
-namespace camada_fis {
+namespace fisica {
 
     /* Classe abstrata para representar uma codificação genérica
      * da camada física da comunicação. */ 

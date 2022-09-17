@@ -1,7 +1,7 @@
 #include "CamadaFisica.hpp"
 #include "Common.hpp"
 
-using namespace camada_fis;
+using namespace fisica;
 
 std::vector<volt> Binaria::codificar(std::vector<bit> &quadro) {
     /* A codificação NRZ (Non return zero) unipolar utiliza

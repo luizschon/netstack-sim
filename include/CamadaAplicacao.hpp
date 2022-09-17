@@ -2,9 +2,9 @@
 #define __CAMADA_APLICACAO_HPP
 
 #include "Common.hpp"
-#include "CamadaFisica.hpp"
+#include "CamadaEnlace.hpp"
 
-namespace camada_apl {
+namespace aplicacao {
 
     /* Classe base que implementa funcionalidades compartilhadas
      * entre tranmissor e receptor do módulo da camada de aplicação.
@@ -25,14 +25,14 @@ namespace camada_apl {
      * específicas do transmissor da camada de aplicação. */
     class Transmissor : public Modulo {
     public:
-        void transmitir(camada_fis::Transmissor *transmissor);
+        void transmitir(enlace::Transmissor *transmissor);
     };
 
     /* Classe derivada de Modulo que implementa funcionalidades
      * específicas do receptor da camada de aplicação. */
     class Receptor : public Modulo {
     public:
-        void receber(camada_fis::Receptor *receptor);
+        void receber(enlace::Receptor *receptor);
     };
 
 }
