@@ -20,8 +20,8 @@ void Transmissor::transmitir(enlace::Transmissor *transmissor) {
 /* Recebe um quadro (composto de bits) do receptor da camada
  * física e traduz para uma string. */
 void Receptor::receber(enlace::Receptor *receptor) {
-    std::vector<bit> quadro = receptor->getQuadro();
-    std::string mensagem = utils::bits_para_string(quadro);
+    std::vector<bit> trem_de_bits = receptor->getTremDeBits();
+    std::string mensagem = utils::bits_para_string(trem_de_bits);
     this->setMensagem(mensagem);
 } // fim do método Receptor::receber
 

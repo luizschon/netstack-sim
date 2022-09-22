@@ -105,7 +105,11 @@ namespace fisica {
         MeioComunicacao() = default;        
         ~MeioComunicacao() = default;        
 
+        void setPorcentagemErro(int porcentagem);
         void transmitir(Transmissor *trans, Receptor *recep);
+
+    private:
+        int porcentagem_de_erro; // Porcentagem de ocorrer um erro na comunicação
     };
 
 }

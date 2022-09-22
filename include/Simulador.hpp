@@ -18,7 +18,7 @@ namespace sim {
         Pilha();
         ~Pilha();
 
-        void simula(const std::string &msg, tipos_enquadramento tipo_enq, tipos_codificacao tipo_cod);
+        void simula(const std::string &msg, tipos_enquadramento tipo_enq, tipos_controle_erro tipo_err, tipos_codificacao tipo_cod);
         
         // Getters para atributos da simulação
         std::string getOutput();
@@ -27,11 +27,14 @@ namespace sim {
         std::vector<bit> getQuadroOutput();
         std::vector<bit> getTremDeBitsInput();
         std::vector<bit> getTremDeBitsOutput();
+        std::vector<bit> getQuadroCodificadoInput();
+        std::vector<bit> getQuadroCodificadoOutput();
         std::vector<volt> getSinalInput();
         std::vector<volt> getSinalOutput();
 
     private:
         void setEnquadramento(tipos_enquadramento tipo);
+        void setControleDeErro(tipos_controle_erro tipo);
         void setCodigo(tipos_codificacao tipo);
         void enviaMensagem();
         void recebeMensagem();
@@ -44,12 +47,14 @@ namespace sim {
         fisica::Transmissor *trans_fisico = nullptr;
         fisica::Receptor *recep_fisico = nullptr;
         fisica::MeioComunicacao *meio = nullptr;
+        tipos_controle_erro controle_de_erro;
 
         // String de input e output
         std::string input, output;
 
         // Quadros e sinais gerados durante a simulação
         std::vector<bit> quadro_input, quadro_output;
+        std::vector<bit> quadro_codificado_input, quadro_codificado_output;
         std::vector<bit> bits_input, bits_output;
         std::vector<volt> sinal_input, sinal_output;
     };

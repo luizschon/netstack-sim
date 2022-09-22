@@ -15,7 +15,13 @@ namespace gui {
   
     WindowInfo * init();
     void mainLoop(WindowInfo *window_info);
-    void geraPlot(std::string msg, tipos_enquadramento tipo_enq, tipos_codificacao tipo_cod);
+    void geraPlot(
+            std::string msg,
+            tipos_enquadramento tipo_enq,
+            tipos_controle_erro tipo_err,
+            int porcentagem,
+            tipos_codificacao tipo_cod
+        );
     void shutdown(WindowInfo *window_info);
 
 }

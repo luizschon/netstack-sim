@@ -29,6 +29,9 @@ typedef int volt;
 #define PULSO_NULO 0
 #define PULSO_NEG -5
 
+#define FLAG 0x7E
+#define ESC 0x1B
+
 /* Enumerador para tornar a seleção do tipo de codificação
  * mais legível no código. */
 typedef enum {
@@ -41,6 +44,12 @@ typedef enum {
     CONTAGEM_DE_CARAC, INSERCAO_DE_BYTES
 } tipos_enquadramento;
 
+/* Enumerador para tornar a seleção do tipo de controle de
+ * erro mais legível no código. */
+typedef enum {
+    BIT_PARIDADE, CRC_32, HAMMING
+} tipos_controle_erro;
+
 typedef std::pair<float*, float*> eixos;
 
 namespace utils {
@@ -49,7 +58,7 @@ namespace utils {
     std::vector<bit> string_para_bits(const std::string &str);
 
     // Operações com overload para capturar bytes no trem de bits.
-    byte get_byte(std::vector<bit>::iterator it);
+    byte get_byte(std::vector<bit>::iterator &it);
     byte get_byte(std::vector<bit> &trem_de_bits, unsigned int pos);
 
     // Operação para capturar e tratar uma sequência de bytes
@@ -65,6 +74,10 @@ namespace utils {
     float * geraEixoY(std::vector<bit> &trem_de_bits, int amostras);
     float * geraEixoX(std::vector<volt> &sinal, int amostras, tipos_codificacao tipo);
     float * geraEixoY(std::vector<volt> &sinal, int amostras);
+
+    std::vector<bit> int_para_bits(int num);
+    int bits_para_int(std::vector<bit> &bits);
+    void insere_byte(byte b, std::vector<bit> &trem_de_bits);
 
 };
 

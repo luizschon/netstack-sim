@@ -1,5 +1,6 @@
 #include "CamadaFisica.hpp"
 #include "Common.hpp"
+#include <iostream>
 
 using namespace fisica;
 
@@ -86,7 +87,7 @@ std::vector<bit> Bipolar::decodificar(std::vector<volt> &sinal) {
      * pulso representa um bit 1. */
     for (auto s : sinal) {
         if (s == PULSO_NULO)
-            quadro.push_back(0);
+            quadro.push_back(0);x
         else
             quadro.push_back(1);
     }
@@ -150,6 +151,11 @@ void MeioComunicacao::transmitir(Transmissor *trans, Receptor *recep) {
         sinalRecebido.push_back(*it);
         it++;
     }
+    
+    std::cout << "sinal\n";
+    for (auto &p : sinalRecebido)
+        std::cout << p << " ";
+    std::cout << "\n";
     recep->setSinal(sinalRecebido);
 } // fim do método MeioComunicacao::transmitir
 

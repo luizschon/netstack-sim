@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Simulador.hpp"
 
 using namespace sim;
@@ -32,6 +33,12 @@ void Pilha::setEnquadramento(tipos_enquadramento tipo) {
     recep_enlace->setEnquadramento(tipo);
 } // fim do método Pilha::setEnquadramento
 
+void Pilha::setControleDeErro(tipos_controle_erro tipo) {
+    this->controle_de_erro = tipo;
+    trans_enlace->setControleDeErro(tipo);
+    recep_enlace->setControleDeErro(tipo);
+} // fim do método Pilha::setControleDeErro
+
 void Pilha::setCodigo(tipos_codificacao tipo) {
     trans_fisico->setCodigo(tipo);
     recep_fisico->setCodigo(tipo);
@@ -41,31 +48,48 @@ void Pilha::setCodigo(tipos_codificacao tipo) {
  * camada de aplicação para a camada física, gerar o sinal
  * e transmití-lo através do meio de comunicação. */
 void Pilha::enviaMensagem() {
-    trans_aplicacao->setMensagem(input);
-    trans_aplicacao->transmitir(trans_enlace);
-    trans_fisico->geraSinal();
+    trans_aplicacao->setMensagem(input);          // Gera o trem de bits da correspondente a mensagem
+    trans_aplicacao->transmitir(trans_enlace);    // Transmite o trem de bits para a camada de enlace
+    trans_enlace->geraQuadro();                   // Enquadra o trem de bits original
+    trans_enlace->geraQuadroCodificado();         // Codifica o quadro original usando controle de erro
+    trans_enlace->transmitir(trans_fisico);       // Transmite o quadro codificado à camada física
+    trans_fisico->geraSinal();                    // Geral sinal elétrico para transmitir o quadro
+    meio->transmitir(trans_fisico, recep_fisico); // Usa meio de comunicação para transmitir bits
 
     // Salva resultados nos atributos privados
-    quadro_input = trans_fisico->getQuadro();
+    bits_input = trans_enlace->getTremDeBits();
+    quadro_input = trans_enlace->getQuadro();
+    quadro_codificado_input = trans_enlace->getQuadroCodificado();
     sinal_input = trans_fisico->getSinal();
-
-    meio->transmitir(trans_fisico, recep_fisico);
 } // fim do método Pilha::enviaMensagem
 
 /* Método resposável por gerar o quadro a partir da decodificacao
  * do sinal transmitido pelo meio, traduzir e mensagem a partir
  * dos bits do quadro, e inserir o resultado na string de output. */
 void Pilha::recebeMensagem() {
-    recep_fisico->geraQuadro();
-    recep_enlace->receber(recep_fisico);
+    recep_fisico->geraQuadro();             // Gera quadro a partir do sinal recebido
+    recep_enlace->receber(recep_fisico);    // Recebe quadro enviado pelo receptor da camada física
 
-    recep_enlace->geraTremDeBits();
-    recep_aplicacao->receber(recep_enlace);
+    // Tenta gerarQuadro original e lida com exceção quando um erro
+    // é detectado. Caso o controle de erro seja código de Hamming,
+    // corrige o quadro
+    try {
+        recep_enlace->geraQuadro();         // Gera quadro original a partir do quadro com controle de erro
+    } catch (std::exception &exp) {
+        if (controle_de_erro == HAMMING)
+            recep_enlace->corrigeQuadro();  // Corrige erro no quadro
+        else
+            throw exp;
+    }
 
+    recep_enlace->geraTremDeBits();         // Gera quadro trem de bits a partir do quadro
+    recep_aplicacao->receber(recep_enlace); // Recebe trem de bits pelo receptor da camada de enlace
+     
     // Salva resultados nos atributos privados
-    bits_output = recep_enlace->getTremDeBits();
-    quadro_output = recep_enlace->getQuadro();
     sinal_output = recep_fisico->getSinal();
+    quadro_codificado_output = recep_enlace->getQuadroCodificado();
+    quadro_output = recep_enlace->getQuadro();
+    bits_output = recep_enlace->getTremDeBits();
     output = recep_aplicacao->getMensagem();
 } // fim do método Pilha::recebeMensagem
 
@@ -73,9 +97,16 @@ void Pilha::recebeMensagem() {
  * do usuário e simular a comunicação entre transmissores e 
  * receptores implementados na pilha. os resultados são armazenados
  * nos atributos privados da instância de Pilha. */
-void Pilha::simula(const std::string &msg, tipos_enquadramento tipo_enq, tipos_codificacao tipo_cod) {
+void Pilha::simula(
+        const std::string &msg,
+        tipos_enquadramento tipo_enq,
+        tipos_controle_erro tipo_err,
+        tipos_codificacao tipo_cod
+    )
+{
     input = msg;
     setEnquadramento(tipo_enq);
+    setControleDeErro(tipo_err);
     setCodigo(tipo_cod);
 
     enviaMensagem();
@@ -105,6 +136,14 @@ std::vector<bit> Pilha::getQuadroInput() {
 std::vector<bit> Pilha::getQuadroOutput() {
     return quadro_output;
 } // fim do método Pilha::getQuadroOutput
+
+std::vector<bit> Pilha::getQuadroCodificadoInput() {
+    return quadro_codificado_input;
+} // fim do método Pilha::getQuadroCodificadoInput
+
+std::vector<bit> Pilha::getQuadroCodificadoOutput() {
+    return quadro_codificado_output;
+} // fim do método Pilha::getQuadroCodificadoOutput
 
 std::vector<volt> Pilha::getSinalInput() {
     return sinal_input;
